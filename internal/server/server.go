@@ -1,9 +1,17 @@
 package server
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"os"
+)
 
 func InitServer() {
 	engine := gin.Default()
 	InitRouter(engine)
-	engine.Run(":8080")
+	runServer(engine, os.Getenv("SERVER_HOST"), os.Getenv("SERVER_PORT"))
+}
+
+func runServer(engine *gin.Engine, host string, port string) {
+	engine.Run(fmt.Sprintf("%s:%s",host, port))
 }
