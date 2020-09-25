@@ -10,7 +10,7 @@ import (
 )
 
 func Connect() {
-	connectionStr := os.Getenv("MONOGODB_CONNECTION_STR")
+	connectionStr := os.Getenv("MONGODB_CONNECTION_STR")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -19,6 +19,9 @@ func Connect() {
 	clientOptions := options.Client().ApplyURI(connectionStr)
 
 	c, err := mongo.NewClient(clientOptions)
+	if err != nil {
+		fmt.Println("MongoDB Client Error:", err)
+	}
 	if err = c.Connect(ctx); err != nil {
 		fmt.Println("Could not connect to MongoDB:", err)
 	}
