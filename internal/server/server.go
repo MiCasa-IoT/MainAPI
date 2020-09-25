@@ -13,5 +13,8 @@ func InitServer() {
 }
 
 func runServer(engine *gin.Engine, host string, port string) {
-	engine.Run(fmt.Sprintf("%s:%s",host, port))
+	err := engine.Run(fmt.Sprintf("%s:%s",host, port))
+	if err != nil {
+		fmt.Println("Gin Error:", err)
+	}
 }
