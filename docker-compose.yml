@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    ports:
+    - "8080:8080"
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    volumes:
+      - ./build/package/db:/data/db
+      - ./build/package/configdb:/data/configdb
+
+volumes:
+  mongodata:
+    driver: local
