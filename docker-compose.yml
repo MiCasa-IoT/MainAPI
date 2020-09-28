@@ -14,15 +14,17 @@ services:
 
   mongo:
     image: mongo
+    container_name: mongo
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: mongo_example
+      TZ: Asia/Tokyo
     ports:
-      - 27017:27017
+      - 27018:27017
     volumes:
-      - ./build/package/db:/data/db
-      - ./build/package/configdb:/data/configdb
+      - ./build/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
 volumes:
   mongodata:
