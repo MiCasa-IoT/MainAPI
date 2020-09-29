@@ -12,5 +12,9 @@ func InitRouter(engine *gin.Engine) {
 		{
 			create.GET("/", controllers.HelloHandler)
 		}
+		collection := v1.Group("/collection")
+		{
+			collection.GET("/", controllers.FindAllDocumentHandler)
+		}
 	}
 }

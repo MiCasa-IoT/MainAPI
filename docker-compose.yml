@@ -22,7 +22,7 @@ services:
       MONGO_INITDB_DATABASE: mongo_example
       TZ: Asia/Tokyo
     ports:
-      - 27018:27017
+      - 1313:27017
     volumes:
       - ./build/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
