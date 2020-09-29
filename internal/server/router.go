@@ -8,13 +8,18 @@ import (
 func InitRouter(engine *gin.Engine) {
 	v1 := engine.Group("/api/v1")
 	{
-		create := v1.Group("/hello")
+		hello := v1.Group("/hello")
 		{
-			create.GET("/", controllers.HelloHandler)
+			hello.GET("/", controllers.HelloHandler)
 		}
-		collection := v1.Group("/collection")
+		db := v1.Group("/db")
 		{
-			collection.GET("/", controllers.FindAllDocumentHandler)
+			document := db.Group("/document")
+			{
+				findAll := document.Group("/findall")
+				findAll.GET("/", controllers.FindAllDocumentHandler)
+			}
+
 		}
 	}
 }
