@@ -4,6 +4,7 @@ import (
 	"MiCasa-API/internal/models"
 	"context"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -39,4 +40,21 @@ func Connect() (*models.MgClient, error) {
 		Client:  c,
 		Context: ctx,
 	}, nil
+}
+
+func FindById(id string) (models.User, error){
+	client, err := Connect()
+	if err != nil {
+		return models.User{}, err
+	}
+
+	var user models.User
+	err = client.DB.Collection(
+		os.Getenv("MONGODB_COLLECTION_DEV")).FindOne(context.Background(),
+			bson.M{"user_id":id}).Decode(&user)
+	if err != nil {
+		return models.User{}, err
+	}
+
+	return user, nil
 }
