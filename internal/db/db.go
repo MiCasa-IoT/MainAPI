@@ -58,3 +58,18 @@ func FindById(id string) (models.User, error){
 
 	return user, nil
 }
+
+func InsertRecord(params models.User) (*mongo.InsertOneResult, error) {
+	client, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+	collection := client.DB.Collection(
+		os.Getenv("MONGODB_COLLECTION_DEV"))
+
+	insertResult, err := collection.InsertOne(context.TODO(), params)
+	if err != nil {
+		return nil, err
+	}
+	return insertResult, nil
+}

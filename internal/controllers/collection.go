@@ -35,29 +35,13 @@ func CreateHandler(ctx *gin.Context) {
 	var params models.User
 	err := ctx.BindJSON(&params)
 	logging.PrintEror(err)
-
 	params.CreatedAt = time.Now().Format(time.RFC3339)
 
-	client, err := db.Connect()
-	logging.PrintEror(err)
-	collection := client.DB.Collection(
-		os.Getenv("MONGODB_COLLECTION_DEV"))
-
-	insertResult, err := collection.InsertOne(context.TODO(), params)
+	result, err := db.InsertRecord(params)
 	logging.PrintEror(err)
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"result": insertResult.InsertedID,
-	})
-}
-
-func UpdateHandler(ctx *gin.Context) {
-	var params models.User
-	err := ctx.BindJSON(&params)
-	logging.PrintEror(err)
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"ping": "pong",
+		"result": result.InsertedID,
 	})
 }
 
@@ -74,6 +58,16 @@ func ReadHandler(ctx *gin.Context) {
 		"name": findResult.Name,
 		"email": findResult.Email,
 		"created_at": findResult.CreatedAt,
+	})
+}
+
+func UpdateHandler(ctx *gin.Context) {
+	var params models.User
+	err := ctx.BindJSON(&params)
+	logging.PrintEror(err)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"ping": "pong",
 	})
 }
 
