@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-func HelloHandler(ctx *gin.Context) {
+func PingHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": "hello",
+		"message": "pong",
 	})
 }
