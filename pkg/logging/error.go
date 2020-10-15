@@ -14,7 +14,7 @@ func PrintErrorWithMessage(err error, message string) {
 	}
 }
 
-func FatalEror(err error) {
+func FatalError(err error) {
 	if err != nil {
 		log.Fatalln(err)
 	}

@@ -7,5 +7,5 @@ import (
 
 func LoadConfig() {
 	err := godotenv.Load("./configs/config.yml")
-	logging.FatalEror(err)
+	logging.FatalError(err)
 }
