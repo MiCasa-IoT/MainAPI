@@ -1,6 +1,7 @@
 package server
 
 import (
+	"MiCasa-API/pkg/logging"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"os"
@@ -14,7 +15,5 @@ func InitServer() {
 
 func runServer(engine *gin.Engine, host string, port string) {
 	err := engine.Run(fmt.Sprintf("%s:%s",host, port))
-	if err != nil {
-		fmt.Println("Gin Error:", err)
-	}
+	logging.PrintErrorWithMessage(err, "GinError")
 }

@@ -8,9 +8,9 @@ import (
 func InitRouter(engine *gin.Engine) {
 	v1 := engine.Group("/api/v1")
 	{
-		hello := v1.Group("/hello")
+		hello := v1.Group("/ping")
 		{
-			hello.GET("/", controllers.HelloHandler)
+			hello.GET("/", controllers.PingHandler)
 		}
 		db := v1.Group("/db")
 		{

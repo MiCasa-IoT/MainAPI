@@ -3,10 +3,10 @@ package controllers
 import (
 	"MiCasa-API/internal/db"
 	"MiCasa-API/internal/models"
+	"MiCasa-API/pkg/logging"
 	"context"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -14,21 +14,17 @@ import (
 
 func ReadAllDocumentHandler(ctx *gin.Context) {
 	client, err := db.Connect()
-	if err != nil {
-		log.Println(err)
-	}
+	logging.PrintEror(err)
+
 	cur, err := client.DB.Collection(
 		os.Getenv("MONGODB_COLLECTION_DEV")).
 		Find(context.Background(), bson.M{})
-	if err != nil {
-		log.Println(err)
-	}
+	logging.PrintEror(err)
 	defer cur.Close(client.Context)
 
 	var documents []bson.M
-	if err = cur.All(context.Background(), &documents); err != nil {
-		log.Println(err)
-	}
+	err = cur.All(context.Background(), &documents)
+	logging.PrintEror(err)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"results": documents,
@@ -37,24 +33,28 @@ func ReadAllDocumentHandler(ctx *gin.Context) {
 
 func CreateHandler(ctx *gin.Context) {
 	var params models.User
-	if err := ctx.BindJSON(&params); err != nil {
-		log.Println(err)
-	}
+	err := ctx.BindJSON(&params)
+	logging.PrintEror(err)
+
 	params.CreatedAt = time.Now().Format(time.RFC3339)
 
+	client, err := db.Connect()
+	logging.PrintEror(err)
+	collection := client.DB.Collection(
+		os.Getenv("MONGODB_COLLECTION_DEV"))
+
+	insertResult, err := collection.InsertOne(context.TODO(), params)
+	logging.PrintEror(err)
+
 	ctx.JSON(http.StatusOK, gin.H{
-		"id": params.UserID,
-		"name": params.Name,
-		"email": params.Email,
-		"created_at": params.CreatedAt,
+		"result": insertResult.InsertedID,
 	})
 }
 
 func UpdateHandler(ctx *gin.Context) {
 	var params models.User
-	if err := ctx.BindJSON(&params); err != nil {
-		log.Println(err)
-	}
+	err := ctx.BindJSON(&params)
+	logging.PrintEror(err)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"ping": "pong",
@@ -63,14 +63,12 @@ func UpdateHandler(ctx *gin.Context) {
 
 func ReadHandler(ctx *gin.Context) {
 	var params models.User
-	if err := ctx.BindJSON(&params); err != nil {
-		log.Println(err)
-	}
+	err := ctx.BindJSON(&params)
+	logging.PrintEror(err)
 
 	findResult, err := db.FindById(params.UserID)
-	if err != nil {
-		log.Println(err)
-	}
+	logging.PrintEror(err)
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"user_id": findResult.UserID,
 		"name": findResult.Name,
