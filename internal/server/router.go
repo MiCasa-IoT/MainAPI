@@ -16,16 +16,16 @@ func InitRouter(engine *gin.Engine) {
 		{
 			document := db.Group("/document")
 			{
-				findAll := document.Group("/findall")
-				findAll.GET("/", controllers.FindAllDocumentHandler)
-				create := document.Group("/create")
-				create.POST("/", controllers.CreateHandler)
-				read := document.Group("/read")
-				read.POST("/", controllers.ReadHandler)
-				update := document.Group("/update")
-				update.POST("/", controllers.UpdateHandler)
-				delete := document.Group("/drop")
-				delete.POST("/", controllers.DeleteHandler)
+				findAllGroup := document.Group("/readall")
+				findAllGroup.GET("/", controllers.ReadAllDocumentHandler)
+				createGroup := document.Group("/create")
+				createGroup.POST("/", controllers.CreateHandler)
+				readGroup := document.Group("/read")
+				readGroup.POST("/", controllers.ReadHandler)
+				updateGroup := document.Group("/update")
+				updateGroup.POST("/", controllers.UpdateHandler)
+				deleteGroup := document.Group("/delete")
+				deleteGroup.POST("/", controllers.DeleteHandler)
 			}
 		}
 	}
