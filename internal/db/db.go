@@ -43,6 +43,29 @@ func Connect() (*models.MgClient, error) {
 	}, nil
 }
 
+func FindAll() ([]bson.M, error){
+	client, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	cur, err := client.DB.Collection(
+		os.Getenv("MONGODB_COLLECTION_DEV")).
+		Find(context.Background(), bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(client.Context)
+
+	var documents []bson.M
+	err = cur.All(context.Background(), &documents)
+	if err != nil {
+		return nil, err
+	}
+
+	return documents, nil
+}
+
 func FindByID(id string) (models.User, error) {
 	client, err := Connect()
 	if err != nil {
@@ -65,6 +88,7 @@ func InsertRecord(params models.User) (*mongo.InsertOneResult, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	collection := client.DB.Collection(
 		os.Getenv("MONGODB_COLLECTION_DEV"))
 
