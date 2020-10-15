@@ -83,6 +83,28 @@ func FindByID(id string) (models.User, error) {
 	return user, nil
 }
 
+func UpdateByID(params models.User) (*mongo.UpdateResult, error) {
+	client, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.D{{"user_id", params.UserID}}
+	update := bson.D{
+		{"$email", params.Email},
+		{"$name", params.Name},
+	}
+
+	collection := client.DB.Collection(
+		os.Getenv("MONGODB_COLLECTION_DEV"))
+
+	updateResult, err := collection.UpdateOne(
+		context.TODO(), filter, update)
+	if err != nil {
+		return nil, err
+	}
+	return updateResult, nil
+}
+
 func InsertRecord(params models.User) (*mongo.InsertOneResult, error) {
 	client, err := Connect()
 	if err != nil {
