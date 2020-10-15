@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func FindAllDocumentHandler(ctx *gin.Context) {
+func ReadAllDocumentHandler(ctx *gin.Context) {
 	client, err := db.Connect()
 	if err != nil {
 		log.Println(err)

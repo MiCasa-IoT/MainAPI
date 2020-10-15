@@ -16,15 +16,15 @@ func InitRouter(engine *gin.Engine) {
 		{
 			document := db.Group("/document")
 			{
-				findAll := document.Group("/findall")
-				findAll.GET("/", controllers.FindAllDocumentHandler)
+				findAll := document.Group("/readall")
+				findAll.GET("/", controllers.ReadAllDocumentHandler)
 				create := document.Group("/create")
 				create.POST("/", controllers.CreateHandler)
 				read := document.Group("/read")
 				read.POST("/", controllers.ReadHandler)
 				update := document.Group("/update")
 				update.POST("/", controllers.UpdateHandler)
-				delete := document.Group("/drop")
+				delete := document.Group("/delete")
 				delete.POST("/", controllers.DeleteHandler)
 			}
 		}
