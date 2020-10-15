@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -31,9 +32,9 @@ func Connect() (*models.MgClient, error) {
 
 	if err := c.Ping(ctx, readpref.Primary()); err != nil {
 		return nil, err
-	} else {
-		fmt.Println("Connection Successful")
 	}
+
+	fmt.Println("Connection Successful")
 	db := c.Database(os.Getenv("MONGODB_DB_DEV"))
 	return &models.MgClient{
 		DB:      db,
@@ -42,7 +43,7 @@ func Connect() (*models.MgClient, error) {
 	}, nil
 }
 
-func FindById(id string) (models.User, error){
+func FindByID(id string) (models.User, error) {
 	client, err := Connect()
 	if err != nil {
 		return models.User{}, err
@@ -51,7 +52,7 @@ func FindById(id string) (models.User, error){
 	var user models.User
 	err = client.DB.Collection(
 		os.Getenv("MONGODB_COLLECTION_DEV")).FindOne(context.Background(),
-			bson.M{"user_id":id}).Decode(&user)
+		bson.M{"user_id": id}).Decode(&user)
 	if err != nil {
 		return models.User{}, err
 	}
@@ -72,4 +73,21 @@ func InsertRecord(params models.User) (*mongo.InsertOneResult, error) {
 		return nil, err
 	}
 	return insertResult, nil
+}
+
+func DeleteByID(id string) (*mongo.DeleteResult, error) {
+	client, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.D{primitive.E{Key: "user_id", Value: id}}
+	deleteResult, err := client.DB.Collection(
+		os.Getenv("MONGODB_COLLECTION_DEV")).DeleteOne(
+			context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+
+	return deleteResult, nil
 }

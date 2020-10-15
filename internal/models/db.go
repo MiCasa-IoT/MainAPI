@@ -6,7 +6,7 @@ import (
 )
 
 type MgClient struct {
-	DB *mongo.Database
-	Client *mongo.Client
+	DB      *mongo.Database
+	Client  *mongo.Client
 	Context context.Context
 }

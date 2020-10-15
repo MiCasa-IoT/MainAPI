@@ -14,6 +14,6 @@ func InitServer() {
 }
 
 func runServer(engine *gin.Engine, host string, port string) {
-	err := engine.Run(fmt.Sprintf("%s:%s",host, port))
+	err := engine.Run(fmt.Sprintf("%s:%s", host, port))
 	logging.PrintErrorWithMessage(err, "GinError")
 }

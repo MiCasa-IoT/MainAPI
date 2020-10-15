@@ -50,13 +50,13 @@ func ReadHandler(ctx *gin.Context) {
 	err := ctx.BindJSON(&params)
 	logging.PrintEror(err)
 
-	findResult, err := db.FindById(params.UserID)
+	findResult, err := db.FindByID(params.UserID)
 	logging.PrintEror(err)
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"user_id": findResult.UserID,
-		"name": findResult.Name,
-		"email": findResult.Email,
+		"user_id":    findResult.UserID,
+		"name":       findResult.Name,
+		"email":      findResult.Email,
 		"created_at": findResult.CreatedAt,
 	})
 }
@@ -72,7 +72,14 @@ func UpdateHandler(ctx *gin.Context) {
 }
 
 func DeleteHandler(ctx *gin.Context) {
+	var params models.User
+	err := ctx.BindJSON(&params)
+	logging.PrintEror(err)
+
+	deleteResult, err := db.DeleteByID(params.UserID)
+	logging.PrintEror(err)
+
 	ctx.JSON(http.StatusOK, gin.H{
-		"ping": "pong",
+		"result": deleteResult,
 	})
 }

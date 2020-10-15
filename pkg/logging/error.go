@@ -10,7 +10,7 @@ func PrintEror(err error) {
 
 func PrintErrorWithMessage(err error, message string) {
 	if err != nil {
-		log.Println(message, ":",  err)
+		log.Println(message, ":", err)
 	}
 }
 
