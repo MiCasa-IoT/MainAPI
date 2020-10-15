@@ -51,6 +51,10 @@ func DeleteHandler(ctx *gin.Context) {
 
 	deleteResult, err := db.DeleteByID(params.UserID)
 	logging.PrintErorWithGinContext(err, ctx)
-	logging.StatusOK(err, ctx, deleteResult)
+	if deleteResult.DeletedCount > 0 {
+		logging.StatusOK(err, ctx, deleteResult)
+	} else {
+		logging.StatusBadRequest(err, ctx, "User Not found")
+	}
 }
 

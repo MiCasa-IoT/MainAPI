@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -88,11 +87,8 @@ func UpdateByID(params models.User) (*mongo.UpdateResult, error) {
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.D{{"user_id", params.UserID}}
-	update := bson.D{
-		{"$email", params.Email},
-		{"$name", params.Name},
-	}
+	filter := bson.M{"user_id": params.UserID}
+	update := bson.M{"$set": bson.M{"email": params.Email, "name": params.Name}}
 
 	collection := client.DB.Collection(
 		os.Getenv("MONGODB_COLLECTION_DEV"))
@@ -127,7 +123,7 @@ func DeleteByID(id string) (*mongo.DeleteResult, error) {
 		return nil, err
 	}
 
-	filter := bson.D{primitive.E{Key: "user_id", Value: id}}
+	filter := bson.M{"user_id": id}
 	deleteResult, err := client.DB.Collection(
 		os.Getenv("MONGODB_COLLECTION_DEV")).DeleteOne(
 			context.TODO(), filter)

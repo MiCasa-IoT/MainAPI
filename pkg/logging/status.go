@@ -34,3 +34,11 @@ func StatusOK(err error, ctx *gin.Context, result interface{}) {
 		})
 	}
 }
+
+func StatusBadRequest(err error, ctx *gin.Context, result interface{}) {
+	if err == nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"result": result,
+		})
+	}
+}
