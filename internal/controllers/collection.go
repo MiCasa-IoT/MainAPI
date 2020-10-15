@@ -6,8 +6,18 @@ import (
 	"MiCasa-API/pkg/logging"
 	"github.com/gin-gonic/gin"
 	"time"
+
+	_ "MiCasa-API/docs"
 )
 
+// ...
+// @Summary 全てのドキュメントを取得し返す
+// @Tags Document
+// @Produce  json
+// @Success 200 {object} responses.SuccessResponse{data=[]models.User}
+// @Failure 400 {object} responses.ErrorResponse
+// @Failure 500 {object} controller.HTTPError
+// @Router /api/v1/db/document/readall [get]
 func ReadAllDocumentHandler(ctx *gin.Context) {
 	documents, err := db.FindAll()
 	logging.PrintErorWithGinContext(err, ctx)
@@ -57,4 +67,3 @@ func DeleteHandler(ctx *gin.Context) {
 		logging.StatusBadRequest(err, ctx, "User Not found")
 	}
 }
-

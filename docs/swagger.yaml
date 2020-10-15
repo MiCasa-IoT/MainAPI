@@ -1,0 +1,13 @@
+basePath: /
+host: localhost:8080
+info:
+  contact:
+    name: Sw-Saturn
+  description: MiCasaのAPIドキュメント
+  license:
+    name: MIT License
+    url: https://github.com/MiCasa-IoT/MainAPI/blob/master/LICENSE
+  title: MiCasa Main API
+  version: "1.0"
+paths: {}
+swagger: "2.0"
