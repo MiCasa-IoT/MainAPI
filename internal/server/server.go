@@ -8,7 +8,7 @@ import (
 )
 
 func InitServer() {
-	engine := gin.Default()
+	engine := gin.New()
 	InitRouter(engine)
 	runServer(engine, os.Getenv("SERVER_HOST"), os.Getenv("SERVER_PORT"))
 }

@@ -1,11 +1,16 @@
 package server
 
 import (
-	"MiCasa-API/internal/controllers"
+	_ "MiCasa-API/docs"
+	"MiCasa-API/internal/controllers/api/v1"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 )
 
 func InitRouter(engine *gin.Engine) {
+	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
+	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	v1 := engine.Group("/api/v1")
 	{
 		hello := v1.Group("/ping")
@@ -25,7 +30,7 @@ func InitRouter(engine *gin.Engine) {
 				updateGroup := document.Group("/update")
 				updateGroup.POST("/", controllers.UpdateHandler)
 				deleteGroup := document.Group("/delete")
-				deleteGroup.POST("/", controllers.DeleteHandler)
+				deleteGroup.DELETE("/", controllers.DeleteHandler)
 			}
 		}
 	}
