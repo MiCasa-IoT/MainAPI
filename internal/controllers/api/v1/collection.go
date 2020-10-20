@@ -10,13 +10,11 @@ import (
 	_ "MiCasa-API/docs"
 )
 
-// ...
-// @Summary 全てのドキュメントを取得し返す
-// @Tags Document
+// ReadAllDocumentHandler ...
+// @Summary 全てのドキュメントを取得する
 // @Produce  json
-// @Success 200 {object} responses.SuccessResponse{data=[]models.User}
-// @Failure 400 {object} responses.ErrorResponse
-// @Failure 500 {object} controller.HTTPError
+// @Success 200 {object} []models.User
+// @Failure 500 {object} models.ErrorResponse
 // @Router /api/v1/db/document/readall [get]
 func ReadAllDocumentHandler(ctx *gin.Context) {
 	documents, err := db.FindAll()
@@ -24,6 +22,14 @@ func ReadAllDocumentHandler(ctx *gin.Context) {
 	logging.StatusOK(err, ctx, documents)
 }
 
+// CreateHandler ...
+// @Summary 新規のドキュメントを作成する
+// @Accept	 json
+// @Produce  json
+// @Param create body models.User true "User"
+// @Success 200 {object} models.InsertOneResult
+// @Failure 500 {object} models.ErrorResponse
+// @Router /api/v1/db/document/create [post]
 func CreateHandler(ctx *gin.Context) {
 	var params models.User
 	err := ctx.BindJSON(&params)
@@ -35,6 +41,14 @@ func CreateHandler(ctx *gin.Context) {
 	logging.StatusOK(err, ctx, createResult.InsertedID)
 }
 
+// ReadHandler ...
+// @Summary 指定したIDのドキュメントを取得する
+// @Accept	 json
+// @Produce  json
+// @Param read body models.User{user_id} true "UserID"
+// @Success 200 {object} models.User
+// @Failure 500 {object} models.ErrorResponse
+// @Router /api/v1/db/document/read [post]
 func ReadHandler(ctx *gin.Context) {
 	var params models.User
 	err := ctx.BindJSON(&params)
@@ -45,6 +59,14 @@ func ReadHandler(ctx *gin.Context) {
 	logging.StatusOK(err, ctx, findResult)
 }
 
+// UpdateHandler ...
+// @Summary 既存のドキュメントを更新する
+// @Accept	 json
+// @Produce  json
+// @Param read body models.User{user_id} true "UserID"
+// @Success 200 {object} models.UpdateResult
+// @Failure 500 {object} models.ErrorResponse
+// @Router /api/v1/db/document/update [post]
 func UpdateHandler(ctx *gin.Context) {
 	var params models.User
 	err := ctx.BindJSON(&params)
@@ -54,6 +76,15 @@ func UpdateHandler(ctx *gin.Context) {
 	logging.StatusOK(err, ctx, updateResult)
 }
 
+// DeleteHandler ...
+// @Summary 既存のドキュメントを削除する
+// @Accept	 json
+// @Produce  json
+// @Param delete body models.User{user_id} true "UserID"
+// @Success 200 {object} models.DeleteResult
+// @Failure 400 {object} models.ErrorResponse "User Not found"
+// @Failure 500 {object} models.ErrorResponse
+// @Router /api/v1/db/document/delete [delete]
 func DeleteHandler(ctx *gin.Context) {
 	var params models.User
 	err := ctx.BindJSON(&params)

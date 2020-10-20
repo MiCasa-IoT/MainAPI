@@ -1,7 +1,8 @@
 package server
 
 import (
-	"MiCasa-API/internal/controllers"
+	_ "MiCasa-API/docs"
+	"MiCasa-API/internal/controllers/api/v1"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
@@ -29,7 +30,7 @@ func InitRouter(engine *gin.Engine) {
 				updateGroup := document.Group("/update")
 				updateGroup.POST("/", controllers.UpdateHandler)
 				deleteGroup := document.Group("/delete")
-				deleteGroup.POST("/", controllers.DeleteHandler)
+				deleteGroup.DELETE("/", controllers.DeleteHandler)
 			}
 		}
 	}
