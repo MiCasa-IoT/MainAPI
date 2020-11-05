@@ -1,8 +1,7 @@
 package models
 
 type Connection struct {
-	OrderID   int    `json:"order_id"`
-	CreatedAt string `json:"created_at"`
-	UserID    string `json:"user_id"`
-	DeviceID  string `json:"device_id"`
+	UUID      string     `json:"uuid" bson:"uuid" `
+	CreatedAt string `json:"created_at" bson:"created_at"`
+	DeletedAt string `json:"deleted_at" bson:"deleted_at"`
 }
