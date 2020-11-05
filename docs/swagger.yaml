@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  models.Connection:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      uuid:
+        type: string
+    type: object
   models.DeleteResult:
     properties:
       deletedCount:
@@ -32,19 +41,6 @@ definitions:
         description: The _id field of the upserted document, or nil if no upsert was done.
         type: object
     type: object
-  models.User:
-    properties:
-      created_at:
-        type: string
-      deleted_at:
-        type: string
-      email:
-        type: string
-      name:
-        type: string
-      user_id:
-        type: string
-    type: object
 host: localhost:8080
 info:
   contact:
@@ -61,12 +57,12 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: User
+      - description: Connection
         in: body
         name: create
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.Connection'
       produces:
       - application/json
       responses:
@@ -84,12 +80,12 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: UserID
+      - description: UUID
         in: body
         name: delete
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.Connection'
       produces:
       - application/json
       responses:
@@ -98,7 +94,7 @@ paths:
           schema:
             $ref: '#/definitions/models.DeleteResult'
         "400":
-          description: User Not found
+          description: UUID Not found
           schema:
             $ref: '#/definitions/models.ErrorResponse'
         "500":
@@ -111,19 +107,19 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: UserID
+      - description: UUID
         in: body
         name: read
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.Connection'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/models.Connection'
         "500":
           description: Internal Server Error
           schema:
@@ -138,7 +134,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.User'
+              $ref: '#/definitions/models.Connection'
             type: array
         "500":
           description: Internal Server Error
@@ -150,12 +146,12 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: UserID
+      - description: UUID
         in: body
         name: read
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.Connection'
       produces:
       - application/json
       responses:

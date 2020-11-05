@@ -65,30 +65,30 @@ func FindAll() ([]bson.M, error){
 	return documents, nil
 }
 
-func FindByID(id string) (models.User, error) {
+func FindByID(id string) (models.Connection, error) {
 	client, err := Connect()
 	if err != nil {
-		return models.User{}, err
+		return models.Connection{}, err
 	}
 
-	var user models.User
+	var connection models.Connection
 	err = client.DB.Collection(
 		os.Getenv("MONGODB_COLLECTION_DEV")).FindOne(context.Background(),
-		bson.M{"user_id": id}).Decode(&user)
+		bson.M{"user_id": id}).Decode(&connection)
 	if err != nil {
-		return models.User{}, err
+		return models.Connection{}, err
 	}
 
-	return user, nil
+	return connection, nil
 }
 
-func UpdateByID(params models.User) (*mongo.UpdateResult, error) {
+func UpdateByID(params models.Connection) (*mongo.UpdateResult, error) {
 	client, err := Connect()
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"user_id": params.UserID}
-	update := bson.M{"$set": bson.M{"email": params.Email, "name": params.Name}}
+	filter := bson.M{"uuid": params.UUID}
+	update := bson.M{"$set": bson.M{"created_at": params.CreatedAt, "deleted_at": params.DeletedAt}}
 
 	collection := client.DB.Collection(
 		os.Getenv("MONGODB_COLLECTION_DEV"))
@@ -101,7 +101,7 @@ func UpdateByID(params models.User) (*mongo.UpdateResult, error) {
 	return updateResult, nil
 }
 
-func InsertRecord(params models.User) (*mongo.InsertOneResult, error) {
+func InsertRecord(params models.Connection) (*mongo.InsertOneResult, error) {
 	client, err := Connect()
 	if err != nil {
 		return nil, err
@@ -123,7 +123,7 @@ func DeleteByID(id string) (*mongo.DeleteResult, error) {
 		return nil, err
 	}
 
-	filter := bson.M{"user_id": id}
+	filter := bson.M{"uuid": id}
 	deleteResult, err := client.DB.Collection(
 		os.Getenv("MONGODB_COLLECTION_DEV")).DeleteOne(
 			context.TODO(), filter)

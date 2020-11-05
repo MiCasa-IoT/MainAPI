@@ -41,12 +41,12 @@ var doc = `{
                 "summary": "新規のドキュメントを作成する",
                 "parameters": [
                     {
-                        "description": "User",
+                        "description": "Connection",
                         "name": "create",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.Connection"
                         }
                     }
                 ],
@@ -77,12 +77,12 @@ var doc = `{
                 "summary": "既存のドキュメントを削除する",
                 "parameters": [
                     {
-                        "description": "UserID",
+                        "description": "UUID",
                         "name": "delete",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.Connection"
                         }
                     }
                 ],
@@ -94,7 +94,7 @@ var doc = `{
                         }
                     },
                     "400": {
-                        "description": "User Not found",
+                        "description": "UUID Not found",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorResponse"
                         }
@@ -119,12 +119,12 @@ var doc = `{
                 "summary": "指定したIDのドキュメントを取得する",
                 "parameters": [
                     {
-                        "description": "UserID",
+                        "description": "UUID",
                         "name": "read",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.Connection"
                         }
                     }
                 ],
@@ -132,7 +132,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.Connection"
                         }
                     },
                     "500": {
@@ -156,7 +156,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.User"
+                                "$ref": "#/definitions/models.Connection"
                             }
                         }
                     },
@@ -180,12 +180,12 @@ var doc = `{
                 "summary": "既存のドキュメントを更新する",
                 "parameters": [
                     {
-                        "description": "UserID",
+                        "description": "UUID",
                         "name": "read",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.Connection"
                         }
                     }
                 ],
@@ -207,6 +207,20 @@ var doc = `{
         }
     },
     "definitions": {
+        "models.Connection": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
         "models.DeleteResult": {
             "type": "object",
             "properties": {
@@ -251,26 +265,6 @@ var doc = `{
                 "upsertedID": {
                     "description": "The _id field of the upserted document, or nil if no upsert was done.",
                     "type": "object"
-                }
-            }
-        },
-        "models.User": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "deleted_at": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
                 }
             }
         }
