@@ -19,7 +19,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: mongo
-      MONGO_INITDB_DATABASE: mongo_example
+      MONGO_INITDB_DATABASE: ble_connections
       TZ: Asia/Tokyo
     ports:
       - 27018:27017
