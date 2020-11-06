@@ -17,6 +17,6 @@ jobs:
         shell: bash
         run: |
           docker-compose build
-          docker-compose login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker-compose tag ${{ secrets.DOCKER_REPOSITORY }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
           docker-compose push
