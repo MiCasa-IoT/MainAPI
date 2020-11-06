@@ -5,7 +5,7 @@ let users = [
         roles: [
             {
                 role: "dbOwner",
-                db: "mongo_example"
+                db: "ble_connections"
             }
         ]
     }
