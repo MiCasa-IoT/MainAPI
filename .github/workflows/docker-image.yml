@@ -11,8 +11,9 @@ jobs:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
-      - name: Push to Docker Hub
+      - name: Checkout Repository
         uses: actions/checkout@v2
+      - name: Build Docker Image
         shell: bash
         run: 
           docker-compose build
