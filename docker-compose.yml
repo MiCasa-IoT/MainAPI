@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   backend:
+    image: swsaturn/micasa-api
     build:
       context: .
       dockerfile: Dockerfile
