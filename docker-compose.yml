@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    ports:
+    - "8080:8080"
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: ble_connections
+      TZ: Asia/Tokyo
+    ports:
+      - 27018:27017
+    volumes:
+      - ./build/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+volumes:
+  mongodata:
+    driver: local
