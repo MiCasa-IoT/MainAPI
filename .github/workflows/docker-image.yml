@@ -11,17 +11,11 @@ jobs:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the repo
+      - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Push to Docker Hub
+      - name: Build Docker Image
         shell: bash
-        env:
-          repository: ${{ secrets.DOCKER_REPOSITORY }}
-          DOCKER_BUILDKIT: 1
-          COMPOSE_DOCKER_CLI_BUILD: 1
-        id: docker-build
-        run: 
-          docker-compose build --build-arg BUILDKIT_INLINE_CACHE=1
-          docker-compose login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker-compose tag ${{ secrets.DOCKER_REPOSITORY }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
+        run: |
+          docker-compose build
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker-compose push
