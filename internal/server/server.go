@@ -10,10 +10,18 @@ import (
 func InitServer() {
 	engine := gin.New()
 	InitRouter(engine)
-	runServer(engine, os.Getenv("SERVER_HOST"), os.Getenv("SERVER_PORT"))
+	runServer(engine)
 }
 
-func runServer(engine *gin.Engine, host string, port string) {
-	err := engine.Run(fmt.Sprintf("%s:%s", host, port))
+func runServer(engine *gin.Engine) {
+	err := engine.Run(GetAddress())
 	logging.PrintEror(err)
+}
+
+func GetAddress() string {
+	serverAddress := fmt.Sprintf("%s:%s",
+		os.Getenv("SERVER_HOST"),
+		os.Getenv("SERVER_PORT"),
+	)
+	return serverAddress
 }

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"MiCasa-API/docs"
 	_ "MiCasa-API/docs"
 	"MiCasa-API/internal/controllers/api/v1"
 	"fmt"
@@ -11,10 +12,14 @@ import (
 )
 
 func InitRouter(engine *gin.Engine) {
+	docs.SwaggerInfo.Host = fmt.Sprintf("%s:%s",
+		os.Getenv("SERVER_HOST"),
+		os.Getenv("SERVER_PORT"),
+	)
+
 	url := ginSwagger.URL(
-		fmt.Sprintf("%s:%s/swagger/doc.json",
-			os.Getenv("SERVER_HOST"),
-			os.Getenv("SERVER_PORT"),
+		fmt.Sprintf("%s/swagger/doc.json",
+			GetAddress(),
 		))
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	v1 := engine.Group("/api/v1")

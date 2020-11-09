@@ -15,7 +15,7 @@ import (
 // @Produce  json
 // @Success 200 {object} []models.Connection
 // @Failure 500 {object} models.ErrorResponse
-// @Router /api/v1/db/document/readall [get]
+// @Router /api/v1/db/document/readall/ [get]
 func ReadAllDocumentHandler(ctx *gin.Context) {
 	documents, err := db.FindAll()
 	logging.PrintErorWithGinContext(err, ctx)
@@ -29,7 +29,7 @@ func ReadAllDocumentHandler(ctx *gin.Context) {
 // @Param create body models.Connection true "Connection"
 // @Success 200 {object} models.InsertOneResult
 // @Failure 500 {object} models.ErrorResponse
-// @Router /api/v1/db/document/create [post]
+// @Router /api/v1/db/document/create/ [post]
 func CreateHandler(ctx *gin.Context) {
 	var params models.Connection
 	err := ctx.BindJSON(&params)
@@ -48,7 +48,7 @@ func CreateHandler(ctx *gin.Context) {
 // @Param read body models.Connection{uuid} true "UUID"
 // @Success 200 {object} models.Connection
 // @Failure 500 {object} models.ErrorResponse
-// @Router /api/v1/db/document/read [post]
+// @Router /api/v1/db/document/read/ [post]
 func ReadHandler(ctx *gin.Context) {
 	var params models.Connection
 	err := ctx.BindJSON(&params)
@@ -66,7 +66,7 @@ func ReadHandler(ctx *gin.Context) {
 // @Param read body models.Connection{uuid} true "UUID"
 // @Success 200 {object} models.UpdateResult
 // @Failure 500 {object} models.ErrorResponse
-// @Router /api/v1/db/document/update [post]
+// @Router /api/v1/db/document/update/ [post]
 func UpdateHandler(ctx *gin.Context) {
 	var params models.Connection
 	err := ctx.BindJSON(&params)
@@ -84,7 +84,7 @@ func UpdateHandler(ctx *gin.Context) {
 // @Success 200 {object} models.DeleteResult
 // @Failure 400 {object} models.ErrorResponse "UUID Not found"
 // @Failure 500 {object} models.ErrorResponse
-// @Router /api/v1/db/document/delete [delete]
+// @Router /api/v1/db/document/delete/ [delete]
 func DeleteHandler(ctx *gin.Context) {
 	var params models.Connection
 	err := ctx.BindJSON(&params)
