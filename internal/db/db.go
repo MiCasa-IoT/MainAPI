@@ -13,7 +13,7 @@ import (
 )
 
 func Connect() (*models.MgClient, error) {
-	connectionStr := os.Getenv("MONGODB_CONNECTION_STR_DEV")
+	connectionStr := os.Getenv("MONGODB_CONNECTION_STR")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -34,7 +34,7 @@ func Connect() (*models.MgClient, error) {
 	}
 
 	fmt.Println("Connection Successful")
-	db := c.Database(os.Getenv("MONGODB_DB_DEV"))
+	db := c.Database(os.Getenv("MONGODB_DB"))
 	return &models.MgClient{
 		DB:      db,
 		Client:  c,
@@ -49,7 +49,7 @@ func FindAll() ([]bson.M, error){
 	}
 
 	cur, err := client.DB.Collection(
-		os.Getenv("MONGODB_COLLECTION_DEV")).
+		os.Getenv("MONGODB_COLLECTION")).
 		Find(context.Background(), bson.M{})
 	if err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func FindByID(id string) (models.Connection, error) {
 
 	var connection models.Connection
 	err = client.DB.Collection(
-		os.Getenv("MONGODB_COLLECTION_DEV")).FindOne(context.Background(),
+		os.Getenv("MONGODB_COLLECTION")).FindOne(context.Background(),
 		bson.M{"user_id": id}).Decode(&connection)
 	if err != nil {
 		return models.Connection{}, err
@@ -91,7 +91,7 @@ func UpdateByID(params models.Connection) (*mongo.UpdateResult, error) {
 	update := bson.M{"$set": bson.M{"created_at": params.CreatedAt, "deleted_at": params.DeletedAt}}
 
 	collection := client.DB.Collection(
-		os.Getenv("MONGODB_COLLECTION_DEV"))
+		os.Getenv("MONGODB_COLLECTION"))
 
 	updateResult, err := collection.UpdateOne(
 		context.TODO(), filter, update)
@@ -108,7 +108,7 @@ func InsertRecord(params models.Connection) (*mongo.InsertOneResult, error) {
 	}
 
 	collection := client.DB.Collection(
-		os.Getenv("MONGODB_COLLECTION_DEV"))
+		os.Getenv("MONGODB_COLLECTION"))
 
 	insertResult, err := collection.InsertOne(context.TODO(), params)
 	if err != nil {
@@ -125,7 +125,7 @@ func DeleteByID(id string) (*mongo.DeleteResult, error) {
 
 	filter := bson.M{"uuid": id}
 	deleteResult, err := client.DB.Collection(
-		os.Getenv("MONGODB_COLLECTION_DEV")).DeleteOne(
+		os.Getenv("MONGODB_COLLECTION")).DeleteOne(
 			context.TODO(), filter)
 	if err != nil {
 		return nil, err
