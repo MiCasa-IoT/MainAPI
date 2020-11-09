@@ -12,6 +12,5 @@ RUN GO111MODULE=on go build -o /go/bin/server ./cmd/main.go
 FROM alpine:3.12
 WORKDIR /usr/bin
 COPY --from=build /go/bin .
-COPY --from=build /go/src/github.com/MiCasa-IoT/MainAPI/configs/.env configs/.env
 COPY --from=build /go/src/github.com/MiCasa-IoT/MainAPI/docs docs
 CMD /usr/bin/server
