@@ -13,4 +13,5 @@ FROM alpine:3.12
 WORKDIR /usr/bin
 COPY --from=build /go/bin .
 COPY --from=build /go/src/github.com/MiCasa-IoT/MainAPI/configs configs
+COPY --from=build /go/src/github.com/MiCasa-IoT/MainAPI/docs docs
 CMD /usr/bin/server
