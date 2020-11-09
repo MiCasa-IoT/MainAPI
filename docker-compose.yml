@@ -10,8 +10,6 @@ services:
       - mongo
     depends_on:
       - mongo
-    env_file:
-      - configs/.env
     ports:
     - "8080:8080"
 
