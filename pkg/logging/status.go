@@ -21,12 +21,6 @@ func PrintErorWithGinContext(err error, ctx *gin.Context) {
 	}
 }
 
-func FatalError(err error) {
-	if err != nil {
-		log.Fatalln(err)
-	}
-}
-
 func StatusOK(err error, ctx *gin.Context, result interface{}) {
 	if err == nil {
 		ctx.JSON(http.StatusOK, gin.H{
