@@ -5,12 +5,7 @@ WORKDIR /go/src/github.com/MiCasa-IoT/MainAPI
 ENV SERVICE_NAME MiCasa-API
 ENV APP /src/${SERVICE_NAME}/
 ENV WORKDIR ${GOPATH}${APP}
-COPY go.mod go.sum ./
-COPY cmd cmd
-COPY configs configs
-COPY docs docs
-COPY internal internal
-COPY pkg pkg
+COPY . .
 
 RUN GO111MODULE=on go build -o /go/bin/server ./cmd/main.go
 
