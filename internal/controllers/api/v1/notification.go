@@ -20,12 +20,22 @@ func SendMessageHandler(ctx *gin.Context) {
 	c := context.Background()
 	var params models.Message
 	err := ctx.BindJSON(&params)
-	logging.PrintErorWithGinContext(err, ctx)
+	logging.PrintErrorWithGinContext(err, ctx)
 
-	client, err := firebase.InitFirebaseCloudMessaging(c)
-	logging.PrintEror(err)
+	app, err := firebase.InitAdminSDK(c)
+	logging.PrintError(err)
+
+	firestoreClient, err := firebase.InitFirestore(c, app)
+	logging.PrintError(err)
+
+	messagingClient, err := firebase.InitMessaging(c, app)
+	logging.PrintError(err)
+
+	_, err = firebase.FilterNotificationTarget(c, firestoreClient, params.EdgeID)
+	logging.PrintError(err)
+
 	message := firebase.CreateMessage(params)
-	response, err := client.SendMulticast(c, message)
-	logging.PrintErorWithGinContext(err, ctx)
+	response, err := messagingClient.SendMulticast(c, message)
+	logging.PrintErrorWithGinContext(err, ctx)
 	logging.StatusOK(err, ctx, response)
 }

@@ -15,7 +15,7 @@ func InitServer() {
 
 func runServer(engine *gin.Engine) {
 	err := engine.Run(GetAddress())
-	logging.PrintEror(err)
+	logging.PrintError(err)
 }
 
 func GetAddress() string {

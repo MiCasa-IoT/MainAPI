@@ -132,7 +132,10 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Connection"
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     },
                     "500": {
@@ -324,6 +327,9 @@ var doc = `{
             "properties": {
                 "body": {
                     "type": "string"
+                },
+                "edge_id": {
+                    "type": "integer"
                 },
                 "tag": {
                     "type": "string"

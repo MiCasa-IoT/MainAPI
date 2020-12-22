@@ -3,7 +3,7 @@ module MiCasa-API
 go 1.15
 
 require (
-	cloud.google.com/go/firestore v1.4.0 // indirect
+	cloud.google.com/go/firestore v1.4.0
 	firebase.google.com/go v3.13.0+incompatible
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/aws/aws-sdk-go v1.34.30 // indirect

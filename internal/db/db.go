@@ -65,21 +65,32 @@ func FindAll() ([]bson.M, error){
 	return documents, nil
 }
 
-func FindByID(id string) (models.Connection, error) {
+func FilterByEdgeID(edgeId int) ([]string, error) {
 	client, err := Connect()
 	if err != nil {
-		return models.Connection{}, err
+		return nil, err
 	}
 
-	var connection models.Connection
-	err = client.DB.Collection(
-		os.Getenv("MONGODB_COLLECTION")).FindOne(context.Background(),
-		bson.M{"user_id": id}).Decode(&connection)
+	var result []string
+	ctx := context.Background()
+	cur, err := client.DB.Collection(
+		os.Getenv("MONGODB_COLLECTION")).Find(ctx,
+		bson.M{"edge_id": edgeId})
 	if err != nil {
-		return models.Connection{}, err
+		return nil, err
+	}
+	defer cur.Close(ctx)
+
+	for cur.Next(ctx){
+		var c models.Connection
+		err := cur.Decode(&c)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, c.UUID)
 	}
 
-	return connection, nil
+	return result, nil
 }
 
 func UpdateByID(params models.Connection) (*mongo.UpdateResult, error) {

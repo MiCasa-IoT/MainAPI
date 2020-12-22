@@ -6,13 +6,13 @@ import (
 	"net/http"
 )
 
-func PrintEror(err error) {
+func PrintError(err error) {
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-func PrintErorWithGinContext(err error, ctx *gin.Context) {
+func PrintErrorWithGinContext(err error, ctx *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{
