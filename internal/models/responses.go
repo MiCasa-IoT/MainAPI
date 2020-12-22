@@ -19,3 +19,7 @@ type DeleteResult struct {
 type ErrorResponse struct {
 	Status string
 }
+
+type FCMResponse struct {
+	Status string
+}

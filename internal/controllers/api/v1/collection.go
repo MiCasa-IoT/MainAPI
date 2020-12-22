@@ -63,7 +63,7 @@ func ReadHandler(ctx *gin.Context) {
 // @Summary 既存のドキュメントを更新する
 // @Accept	 json
 // @Produce  json
-// @Param read body models.Connection{uuid} true "UUID"
+// @Param update body models.Connection{uuid} true "UUID"
 // @Success 200 {object} models.UpdateResult
 // @Failure 500 {object} models.ErrorResponse
 // @Router /api/v1/db/document/update/ [post]
