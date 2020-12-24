@@ -31,8 +31,10 @@ func SendMessageHandler(ctx *gin.Context) {
 	messagingClient, err := firebase.InitMessaging(c, app)
 	logging.PrintError(err)
 
-	_, err = firebase.FilterNotificationTarget(c, firestoreClient, params.EdgeID)
+	tokens, err := firebase.FilterNotificationTarget(c, firestoreClient, params.EdgeID)
 	logging.PrintError(err)
+
+	params.Tokens = tokens
 
 	message := firebase.CreateMessage(params)
 	response, err := messagingClient.SendMulticast(c, message)

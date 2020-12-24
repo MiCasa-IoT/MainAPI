@@ -2,6 +2,7 @@ package db
 
 import (
 	"MiCasa-API/internal/models"
+	"MiCasa-API/pkg/array"
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
@@ -81,13 +82,43 @@ func FilterByEdgeID(edgeId int) ([]string, error) {
 	}
 	defer cur.Close(ctx)
 
-	for cur.Next(ctx){
+	for cur.Next(ctx) {
 		var c models.Connection
 		err := cur.Decode(&c)
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, c.UUID)
+		if array.NotStrContains(result, c.UUID) {
+			result = append(result, c.UUID)
+		}
+	}
+
+	return result, nil
+}
+
+func GetLatestUUIDToFilterByEdgeID(uuid []string, edgeId int) ([]string, error) {
+	client, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	var result []string
+	ctx := context.Background()
+	collection := client.DB.Collection(os.Getenv("MONGODB_COLLECTION"))
+	option := options.FindOne().SetSort(bson.M{"created_at": -1})
+
+	for _, u := range uuid {
+		r := collection.FindOne(ctx, bson.M{"uuid": u}, option)
+
+		var c models.Connection
+		err := r.Decode(&c)
+		if err != nil {
+			return nil, err
+		}
+		print(c.UUID, c.EdgeID, c.CreatedAt)
+		if c.EdgeID == edgeId {
+			result = append(result, c.UUID)
+		}
 	}
 
 	return result, nil

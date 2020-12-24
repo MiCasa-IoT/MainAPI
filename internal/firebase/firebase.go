@@ -7,14 +7,15 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	firebase "firebase.google.com/go"
+	_ "firebase.google.com/go/auth"
 	"firebase.google.com/go/messaging"
-	"go.mongodb.org/mongo-driver/bson"
+	"fmt"
 	"google.golang.org/api/option"
 )
 
 func InitAdminSDK(ctx context.Context) (*firebase.App, error) {
-	account := option.WithCredentialsFile("configs/account.json")
-	app, err := firebase.NewApp(ctx, nil, account)
+	opt := option.WithCredentialsFile("configs/account.json")
+	app, err := firebase.NewApp(ctx, nil, opt)
 	if err != nil {
 		logging.PrintError(err)
 		return nil, err
@@ -36,7 +37,7 @@ func InitMessaging(ctx context.Context, app *firebase.App) (*messaging.Client, e
 func InitFirestore(ctx context.Context, app *firebase.App) (*firestore.Client, error) {
 	client, err := app.Firestore(ctx)
 	if err != nil {
-		logging.PrintError(err)
+		logging.PrintError(fmt.Errorf("firestore: %s", err))
 		return nil, err
 	}
 
@@ -51,12 +52,12 @@ func CreateMessage(params models.Message) *messaging.MulticastMessage {
 	androidNotification.Tag = params.Tag
 	notification := new(messaging.Notification)
 	notification.Title = params.Title
-	notification.Body = params.Body
+	notification.Body = fmt.Sprintf("Edge ID: %d\n%s",params.EdgeID, params.Body)
 
 	message := &messaging.MulticastMessage {
 		Data: map[string] string {
 			"title": params.Title,
-			"body": params.Body,
+			"body": fmt.Sprintf("Edge ID: %d\n%s",params.EdgeID, params.Body),
 		},
 		Android: android,
 		Notification: notification,
@@ -66,20 +67,28 @@ func CreateMessage(params models.Message) *messaging.MulticastMessage {
 	return message
 }
 
-func FilterNotificationTarget(ctx context.Context, client *firestore.Client, edgeId int) ([]bson.M, error){
+func FilterNotificationTarget(ctx context.Context, client *firestore.Client, edgeId int) ([]string, error){
 	uuid, err := db.FilterByEdgeID(edgeId)
 	logging.PrintError(err)
-	for _, u := range uuid{
+
+	uuid, err = db.GetLatestUUIDToFilterByEdgeID(uuid, edgeId)
+	logging.PrintError(err)
+
+	for _, u := range uuid {
 		println(u)
 	}
 
-	collection, err := client.CollectionGroup("users").Documents(ctx).GetAll()
+	collection, err := client.Collection("users").Where("uuid", "in", uuid).Documents(ctx).GetAll()
+
 	if err != nil {
 		return nil, err
 	}
-	for _, c := range collection{
-		println(c.Data())
+
+	var tokens []string
+
+	for _, snapshot := range collection {
+		tokens = append(tokens, snapshot.Data()["token"].(string))
 	}
 
-	return nil, nil
+	return tokens, nil
 }
