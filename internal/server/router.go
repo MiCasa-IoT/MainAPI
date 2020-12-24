@@ -44,5 +44,10 @@ func InitRouter(engine *gin.Engine) {
 				deleteGroup.DELETE("/", controllers.DeleteHandler)
 			}
 		}
+		message := v1.Group("/message")
+		{
+			sendGroup := message.Group("/send")
+			sendGroup.POST("/", controllers.SendMessageHandler)
+		}
 	}
 }

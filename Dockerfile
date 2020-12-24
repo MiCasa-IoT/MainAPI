@@ -1,4 +1,4 @@
-FROM golang:1.15.2-alpine3.12 AS build
+FROM golang:1.15.6-alpine3.12 AS build
 
 RUN apk --no-cache add gcc g++ make ca-certificates
 WORKDIR /go/src/github.com/MiCasa-IoT/MainAPI
