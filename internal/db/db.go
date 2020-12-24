@@ -115,7 +115,6 @@ func GetLatestUUIDToFilterByEdgeID(uuid []string, edgeId int) ([]string, error) 
 		if err != nil {
 			return nil, err
 		}
-		print(c.UUID, c.EdgeID, c.CreatedAt)
 		if c.EdgeID == edgeId {
 			result = append(result, c.UUID)
 		}

@@ -11,10 +11,11 @@ import (
 	"firebase.google.com/go/messaging"
 	"fmt"
 	"google.golang.org/api/option"
+	"os"
 )
 
 func InitAdminSDK(ctx context.Context) (*firebase.App, error) {
-	opt := option.WithCredentialsFile("configs/account.json")
+	opt := option.WithCredentialsFile(os.Getenv("FIREBASE_CREDENTIAL"))
 	app, err := firebase.NewApp(ctx, nil, opt)
 	if err != nil {
 		logging.PrintError(err)
@@ -74,21 +75,17 @@ func FilterNotificationTarget(ctx context.Context, client *firestore.Client, edg
 	uuid, err = db.GetLatestUUIDToFilterByEdgeID(uuid, edgeId)
 	logging.PrintError(err)
 
-	for _, u := range uuid {
-		println(u)
+	if len(uuid) > 0 {
+		collection, err := client.Collection("users").Where("uuid", "in", uuid).Documents(ctx).GetAll()
+		if err != nil {
+			return nil, err
+		}
+
+		var tokens []string
+		for _, snapshot := range collection {
+			tokens = append(tokens, snapshot.Data()["token"].(string))
+		}
+		return tokens, nil
 	}
-
-	collection, err := client.Collection("users").Where("uuid", "in", uuid).Documents(ctx).GetAll()
-
-	if err != nil {
-		return nil, err
-	}
-
-	var tokens []string
-
-	for _, snapshot := range collection {
-		tokens = append(tokens, snapshot.Data()["token"].(string))
-	}
-
-	return tokens, nil
+	return nil, nil
 }

@@ -34,10 +34,14 @@ func SendMessageHandler(ctx *gin.Context) {
 	tokens, err := firebase.FilterNotificationTarget(c, firestoreClient, params.EdgeID)
 	logging.PrintError(err)
 
-	params.Tokens = tokens
+	if tokens != nil {
+		params.Tokens = tokens
+		message := firebase.CreateMessage(params)
+		response, err := messagingClient.SendMulticast(c, message)
 
-	message := firebase.CreateMessage(params)
-	response, err := messagingClient.SendMulticast(c, message)
-	logging.PrintErrorWithGinContext(err, ctx)
-	logging.StatusOK(err, ctx, response)
+		logging.PrintErrorWithGinContext(err, ctx)
+		logging.StatusOK(err, ctx, response)
+	} else {
+		logging.StatusBadRequest(err, ctx, "Target not found")
+	}
 }
