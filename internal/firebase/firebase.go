@@ -6,6 +6,7 @@ import (
 	"MiCasa-API/pkg/logging"
 	"cloud.google.com/go/firestore"
 	"context"
+	"encoding/base64"
 	firebase "firebase.google.com/go"
 	_ "firebase.google.com/go/auth"
 	"firebase.google.com/go/messaging"
@@ -15,7 +16,8 @@ import (
 )
 
 func InitAdminSDK(ctx context.Context) (*firebase.App, error) {
-	opt := option.WithCredentialsFile(os.Getenv("FIREBASE_CREDENTIAL"))
+	credDec, err := base64.StdEncoding.DecodeString(os.Getenv("GOOGLE_APPLICATION_CREDENTIAL"))
+	opt := option.WithCredentialsJSON(credDec)
 	app, err := firebase.NewApp(ctx, nil, opt)
 	if err != nil {
 		logging.PrintError(err)
