@@ -12,7 +12,6 @@ require (
 	github.com/go-openapi/swag v0.19.9 // indirect
 	github.com/go-playground/validator/v10 v10.4.0 // indirect
 	github.com/golang/snappy v0.0.2 // indirect
-	github.com/googleapis/gax-go v1.0.3 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/klauspost/compress v1.11.0 // indirect
@@ -23,8 +22,6 @@ require (
 	github.com/ugorji/go v1.1.12 // indirect
 	go.mongodb.org/mongo-driver v1.4.1
 	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee // indirect
-	golang.org/x/oauth2 v0.0.0-20201109201403-9fd604954f58
 	google.golang.org/api v0.36.0
-	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
